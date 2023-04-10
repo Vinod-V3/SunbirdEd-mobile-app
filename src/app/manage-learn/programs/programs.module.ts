@@ -22,7 +22,7 @@ const routes: Routes = [
     component: SolutionListingComponent,
   },
   {
-    path: `details`,
+    path: `${RouterLinks.DETAILS}/:id`,
     component: ProgramDetailsComponent,
   },
 ];

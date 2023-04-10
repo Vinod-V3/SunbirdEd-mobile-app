@@ -1,13 +1,13 @@
 <ion-content class="ion-padding">
   <ion-card class="details-block w-100">
-    <div class="title">{{programDetails.programName}}</div>
+    <div class="title">{{programDetails?.programName}}</div>
     <div class="description">{{description}}
-      <span class="read-more" (click)="showMore=!showMore; readMoreOrLess()" *ngIf="programDetails.description.length > characterLimit">
+      <span class="read-more" (click)="showMore=!showMore; readMoreOrLess()" *ngIf="programDetails?.description?.length > characterLimit">
         {{ (showMore ? 'READ_LESS' : 'READ_MORE') | translate }}
       </span>
     </div>
     <div class="hr-line"></div>
-    <ion-button class="custom-btn-txt-transform-none" (click)="showConsentPopup()" expand="block" *ngIf="!this.programDetails.programJoined; else showMessage">
+    <ion-button class="custom-btn-txt-transform-none" (click)="showConsentPopup()" expand="block" *ngIf="!programDetails?.programJoined; else showMessage">
       {{"FRMELEMNTS_LBL_JOIN_PROGRAM_POPUP" | translate}}
     </ion-button>
     <ng-template #showMessage>
@@ -31,8 +31,8 @@
       </div>
     </div>
     <div *ngIf="selectedSection == data?.sectionName">
-      <div *ngFor="let section of data.sectionList">
-        <app-item-list-card [title]="section.name" (click)="cardClick()">
+      <div *ngFor="let section of data?.sectionList">
+        <app-item-list-card [title]="section?.name" (click)="cardClick()">
         </app-item-list-card>
       </div>
     </div>
@@ -45,6 +45,6 @@
     <div class="message-1"><b>{{"EMPTY_SEARCH_RESULTS" | translate}}.</b></div>
     <div>{{"FRMELEMNTS_MSG_NO_SOLUTIONS_FOR_PROGRAM" | translate:{'type':selectedSection} }}</div>
   </div>
-  <app-share-profile-data (save)="save($event)" [dataSharingStatus]="sharingStatus" [type]="'program'" [lastUpdatedOn]="endDate" *ngIf="this.programDetails.programJoined">
+  <app-share-profile-data (save)="save($event)" [dataSharingStatus]="sharingStatus" [type]="'program'" [lastUpdatedOn]="endDate" *ngIf="programDetails?.programJoined">
   </app-share-profile-data>
 </ion-content>

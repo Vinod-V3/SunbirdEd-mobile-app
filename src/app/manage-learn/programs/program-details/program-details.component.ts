@@ -3,7 +3,10 @@ import { AppHeaderService } from '@app/services';
 import { LibraryFiltersLayout } from '@project-sunbird/common-consumption';
 import { TranslateService } from '@ngx-translate/core';
 import { GenericPopUpService } from '../../shared';
-import { solutionsList } from './program-details.component.spec.data'
+import { ActivatedRoute } from '@angular/router';
+import { urlConstants } from '../../core/constants/urlConstants';
+import { LoaderService, UtilsService } from '../../core';
+import { KendraApiService } from '../../core/services/kendra-api.service';
 
 @Component({
   selector: 'app-program-details',
@@ -23,23 +26,24 @@ export class ProgramDetailsComponent implements OnInit {
   showMore:boolean=false
   description
   characterLimit = 150
-  programDetails:any={
-    data: solutionsList,
-    programJoined:false,
-    requestForPIIConsent:true,
-    count: 3,
-    programName: 'TEST_SCOPE_PROGRAM',
-    programId: '5ff438b04698083dbfab7284',
-    description: "View and participate in educational programs active in your location and designed for your role."
-  }
+  programDetails:any={}
   solutionsList:any=[]
   filteredList:any=[]
   sharingStatus='ACTIVE'
   endDate=Date()
+  programId
+  count = 0;
+  limit = 25;
+  page = 1;
 
-  constructor(private headerService: AppHeaderService, private translate: TranslateService, private popupService: GenericPopUpService) {
+  constructor(private headerService: AppHeaderService, private translate: TranslateService, private popupService: GenericPopUpService,
+    private activatedRoute: ActivatedRoute, private loader: LoaderService, private utils: UtilsService, private kendraService: KendraApiService) {
     this.translate.get(['ALL','FRMELEMNTS_LBL_PROJECTS','FRMELEMNTS_LBL_OBSERVATIONS','FRMELEMNTS_LBL_COURSES','FRMELEMNTS_LBL_SURVEYS']).subscribe((translation)=>{
       this.filtersList = Object.keys(translation).map(translateItem => { return translation[translateItem]})
+    })
+    activatedRoute.params.subscribe((param)=>{
+      this.programId = param.id
+      this.getSolutions()
     })
   }
 
@@ -51,8 +55,33 @@ export class ProgramDetailsComponent implements OnInit {
     this.headerConfig.showBurgerMenu = false
     this.headerConfig.actionButtons = []
     this.headerService.updatePageConfig(this.headerConfig)
-    this.readMoreOrLess()
-    this.formatList()
+  }
+
+  async getSolutions() {
+    this.loader.startLoader();
+    let payload = await this.utils.getProfileInfo();
+    if (payload) {
+      const config = {
+        url:`${urlConstants.API_URLS.SOLUTIONS_LISTING}${this.programId}?page=${this.page}&limit=${this.limit}&search=`,
+        payload: payload,
+      };
+      this.kendraService.post(config).subscribe(
+        (success) => {
+          this.loader.stopLoader();
+          if (success.result.data) {
+            this.programDetails = success.result
+            this.count = success.result.count;
+            this.formatList()
+            this.readMoreOrLess()
+          }
+        },
+        (error) => {
+          this.loader.stopLoader();
+        }
+      );
+    } else {
+      this.loader.stopLoader();
+    }
   }
 
   readMoreOrLess(){

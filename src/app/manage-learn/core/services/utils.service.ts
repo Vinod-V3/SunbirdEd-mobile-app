@@ -20,6 +20,8 @@ import { Events } from '@app/util/events';
 import { Location } from "@angular/common";
 import { ToastService } from "./toast/toast.service";
 import { TranslateService } from "@ngx-translate/core";
+import { PopoverController } from "@ionic/angular";
+import { PiiConsentPopupComponent } from "../../shared";
 
 @Injectable({
   providedIn: "root"
@@ -41,6 +43,7 @@ export class UtilsService {
   filters: any = {};
   statuses = statuses;
   numberTasksCompleted =0;
+  consentPopup
   constructor(
     @Inject("PROFILE_SERVICE") private profileService: ProfileService,
     @Inject("AUTH_SERVICE") public authService: AuthService,
@@ -54,6 +57,7 @@ export class UtilsService {
     private location : Location,
     private toast : ToastService,
     private translate: TranslateService,
+    private popoverCtrl : PopoverController
 
   ) {
     this.events.subscribe("loggedInProfile:update", _ => {
@@ -780,4 +784,42 @@ return data;
     ];
     return tabs;
   }
+
+  async showConsentPopup(type){
+    let componentProps={}
+    switch (type) {
+      case 'program':
+        componentProps={
+          msg1 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG1",
+          msg2 : "FRMELEMNTS_LBL_CONSENT_POPUP_POLICY_MSG",
+          msg3 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG2",
+          link : RouterLinks.TERM_OF_USE
+        }
+        break;
+
+      default:
+        componentProps={
+          msg1 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG1",
+          msg2 : "FRMELEMNTS_LBL_CONSENT_POPUP_POLICY_MSG",
+          msg3 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG2",
+          link : RouterLinks.TERM_OF_USE
+        }
+        break;
+    }
+    this.consentPopup = await this.popoverCtrl.create({
+      component : PiiConsentPopupComponent,
+      componentProps : componentProps,
+      cssClass: 'sb-popover back-drop-hard',
+      backdropDismiss: false
+    })
+    await this.consentPopup.present()
+    let {data} = await this.consentPopup.onDidDismiss()
+    return data
+  }
+
+  async closeConsentPopup(){
+    this.consentPopup ? await this.consentPopup.dismiss() : null
+  }
+
+
 }

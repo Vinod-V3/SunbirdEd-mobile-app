@@ -5,7 +5,7 @@ import { TranslateService } from '@ngx-translate/core';
 import { GenericPopUpService } from '../../shared';
 import { ActivatedRoute } from '@angular/router';
 import { urlConstants } from '../../core/constants/urlConstants';
-import { LoaderService, UtilsService } from '../../core';
+import { LoaderService, UtilsService, ToastService } from '../../core';
 import { KendraApiService } from '../../core/services/kendra-api.service';
 
 @Component({
@@ -37,7 +37,8 @@ export class ProgramDetailsComponent implements OnInit {
   page = 1;
 
   constructor(private headerService: AppHeaderService, private translate: TranslateService, private popupService: GenericPopUpService,
-    private activatedRoute: ActivatedRoute, private loader: LoaderService, private utils: UtilsService, private kendraService: KendraApiService) {
+    private activatedRoute: ActivatedRoute, private loader: LoaderService, private utils: UtilsService, private kendraService: KendraApiService,
+    private toastService: ToastService) {
     this.translate.get(['ALL','FRMELEMNTS_LBL_PROJECTS','FRMELEMNTS_LBL_OBSERVATIONS','FRMELEMNTS_LBL_COURSES','FRMELEMNTS_LBL_SURVEYS']).subscribe((translation)=>{
       this.filtersList = Object.keys(translation).map(translateItem => { return translation[translateItem]})
     })
@@ -128,16 +129,23 @@ export class ProgramDetailsComponent implements OnInit {
   }
 
   joinProgram(){
-    this.popupService.showJoinProgramForProjectPopup("FRMELEMNTS_LBL_JOIN_PROGRAM_POPUP",this.programDetails.programName,"all the resources in this program","FRMELEMNTS_LBL_JOIN_PROGRAM_POPUP").then(
+    this.popupService.showJoinProgramForProjectPopup("FRMELEMNTS_LBL_JOIN_PROGRAM_POPUP",this.programDetails.programName,'program',
+    "FRMELEMNTS_LBL_JOIN_PROGRAM_POPUP","FRMELEMNTS_LBL_JOIN_PROGRAM_MSG2").then(
       (data:any)=>{
         if(data){
-          this.programDetails.programJoined = true
+          this.showConsentPopup()
         }
       }
     )
   }
   
-  showConsentPopup(){}
+  showConsentPopup(){
+    this.utils.showConsentPopup('program').then((data)=>{
+      if(data!==undefined){
+        this.programDetails.programJoined = true
+      }
+    })
+  }
 
   cardClick(){
     if(!this.programDetails.programJoined){
@@ -146,7 +154,14 @@ export class ProgramDetailsComponent implements OnInit {
   }
 
   save(event){
-    this.showConsentPopup()
+    if(this.sharingStatus!==event){
+      this.showConsentPopup()
+      this.sharingStatus=event
+    }else{
+    }
   }
 
+  ionViewWillLeave(){
+    this.utils.closeConsentPopup()
+  }
 }

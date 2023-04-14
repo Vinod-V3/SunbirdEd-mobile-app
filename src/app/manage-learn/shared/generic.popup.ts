@@ -76,14 +76,15 @@ export class GenericPopUpService {
     return data;
 }
 
-  async showJoinProgramForProjectPopup(header,name,type,button){
+  async showJoinProgramForProjectPopup(header,name,type,button,message?){
     const alert = await this.popOverCtrl.create({
       component : JoinProgramComponent,
       componentProps: {
         header: header,
         name: name,
         type:type,
-        button: button
+        button: button,
+        message: message
       },
       cssClass: 'sb-popover',
     });

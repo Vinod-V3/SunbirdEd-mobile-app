@@ -39,7 +39,7 @@ export class ProgramDetailsComponent implements OnInit {
   constructor(private headerService: AppHeaderService, private translate: TranslateService, private popupService: GenericPopUpService,
     private activatedRoute: ActivatedRoute, private loader: LoaderService, private utils: UtilsService, private kendraService: KendraApiService,
     private toastService: ToastService) {
-    this.translate.get(['ALL','FRMELEMNTS_LBL_PROJECTS','FRMELEMNTS_LBL_OBSERVATIONS','FRMELEMNTS_LBL_COURSES','FRMELEMNTS_LBL_SURVEYS']).subscribe((translation)=>{
+    this.translate.get(['ALL','FRMELEMNTS_LBL_PROJECTS','FRMELEMNTS_LBL_OBSERVATIONS','FRMELEMNTS_LBL_COURSES','FRMELEMNTS_LBL_SURVEY']).subscribe((translation)=>{
       this.filtersList = Object.keys(translation).map(translateItem => { return translation[translateItem]})
     })
     activatedRoute.params.subscribe((param)=>{
@@ -99,7 +99,7 @@ export class ProgramDetailsComponent implements OnInit {
 
   formatList(){
     this.programDetails.data.forEach(data => {
-     let sectionName=data.type=='improvementProject'?'projects':data.type+'s'
+     let sectionName=data.type=='improvementProject'?'projects':data.type=='survey'?data.type:data.type+'s'
      let index = this.solutionsList.findIndex((val)=>{return val.sectionName==sectionName})
      if(index!==-1){
       this.solutionsList[index].sectionList.push(data)
@@ -109,21 +109,16 @@ export class ProgramDetailsComponent implements OnInit {
      }
     });
     this.filteredList=this.solutionsList.sort((a,b)=>{return a.order - b.order})
-    this.selectedSection=this.solutionsList[0]?.sectionName
   }
 
   onFilterChange(event){
     this.selectedFilterIndex = event.data.index
     this.filteredList=this.solutionsList
-    if(event.data.index==0){
-      this.selectedSection=this.solutionsList[0]?.sectionName
-    }else{
-      let index =this.solutionsList.findIndex((data)=>{
+    this.selectedSection = ''
+    if(event.data.index!==0){
+      this.filteredList = this.solutionsList.filter((data)=>{
         return data.sectionName == event.data.text.toLowerCase()
       })
-      if(index==-1){
-        this.filteredList=[]
-      }
       this.selectedSection = event.data.text.toLowerCase()
     }
   }
@@ -163,5 +158,9 @@ export class ProgramDetailsComponent implements OnInit {
 
   ionViewWillLeave(){
     this.utils.closeConsentPopup()
+  }
+
+  selectSection(name){
+    this.selectedSection = name
   }
 }

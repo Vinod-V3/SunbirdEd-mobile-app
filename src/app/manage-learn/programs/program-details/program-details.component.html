@@ -24,7 +24,7 @@
   </div>
 
   <ion-card class="section-card" *ngFor="let data of filteredList">
-    <div class="d-flex flex-jc-space-between p-10 section-details">
+    <div class="d-flex flex-jc-space-between p-10 section-details" (click)="selectSection(data?.sectionName)">
       <div class="section-name">{{data?.sectionName}}</div>
       <div class="icon">
         <ion-icon name="{{selectedSection == data?.sectionName?'chevron-up':'chevron-down'}}"></ion-icon>

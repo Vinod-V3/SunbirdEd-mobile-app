@@ -134,10 +134,13 @@ export class ProgramDetailsComponent implements OnInit {
     )
   }
   
-  showConsentPopup(){
+  showConsentPopup(message?){
     this.utils.showConsentPopup('program').then((data)=>{
       if(data!==undefined){
         this.programDetails.programJoined = true
+        if(message){
+          this.toastService.openToast(message)
+        }
       }
     })
   }
@@ -149,10 +152,15 @@ export class ProgramDetailsComponent implements OnInit {
   }
 
   save(event){
+    let message
+    this.translate.get(['FRMELEMNTS_MSG_DATA_SETTINGS_UPDATE_SUCCESS']).subscribe((msg)=>{
+      message = msg['FRMELEMNTS_MSG_DATA_SETTINGS_UPDATE_SUCCESS']
+    })
     if(this.sharingStatus!==event){
-      this.showConsentPopup()
+      this.showConsentPopup(message)
       this.sharingStatus=event
     }else{
+      this.toastService.openToast(message)
     }
   }
 

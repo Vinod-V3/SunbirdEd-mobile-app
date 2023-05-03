@@ -9,10 +9,10 @@ import { PopoverController } from '@ionic/angular';
 })
 export class PiiConsentPopupComponent implements OnInit {
 
-  @Input() msg1
-  @Input() msg2
-  @Input() msg3
-  @Input() link
+  @Input() consentMessage1
+  @Input() consentMessage2
+  @Input() consentMessage3
+  @Input() redirectLink
   isAgreed=false
   profile
   detailsList=[]
@@ -29,13 +29,13 @@ export class PiiConsentPopupComponent implements OnInit {
         this.detailsList.push({
             key: this.commonUtilService.getTranslatedValue(element.templateOptions.placeHolder,
                 JSON.parse(element.templateOptions.placeHolder)['en']),
-            value: this.converDataSrcToObject(element)
+            value: this.convertDataSrcToObject(element)
         });
     });
 }
 
 
-converDataSrcToObject(ele) {
+convertDataSrcToObject(ele) {
   const dataSrc = ele.templateOptions.dataSrc;
   switch (dataSrc.marker) {
       case 'SERVER_PROFILE':
@@ -95,7 +95,7 @@ converDataSrcToObject(ele) {
 
   async openTermsOfUse(){
     const baseUrl = await this.utilityService.getBuildConfigValue('TOU_BASE_URL');
-    const url = baseUrl + this.link;
+    const url = baseUrl + this.redirectLink;
     const options = 'hardwareback=yes,clearcache=no,zoom=no,toolbar=yes,disallowoverscroll=yes';
     (window as any).cordova.InAppBrowser.open(url, '_blank', options);
   }

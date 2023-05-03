@@ -26,9 +26,9 @@
                     <ion-checkbox class="terms-checkbox" (ionChange)="changeEvent($event)"></ion-checkbox>
                 </span>
                   <p class="font-weight-600 pl-8">
-                      <span>{{ msg1 | translate }}</span>
-                      <span (click)="openTermsOfUse()" class="terms-info">{{ msg2 | translate }}</span>
-                      <span >{{ msg3 | translate }}</span>
+                      <span>{{ consentMessage1 | translate }}</span>
+                      <span (click)="openTermsOfUse()" class="terms-info">{{ consentMessage2 | translate }}</span>
+                      <span >{{ consentMessage3 | translate }}</span>
                   </p>
             </div>
             <div class="button-section d-flex flex-jc-space-around">

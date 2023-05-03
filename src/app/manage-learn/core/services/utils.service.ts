@@ -790,19 +790,19 @@ return data;
     switch (type) {
       case 'program':
         componentProps={
-          msg1 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG1",
-          msg2 : "FRMELEMNTS_LBL_CONSENT_POPUP_POLICY_MSG",
-          msg3 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG2",
-          link : RouterLinks.TERM_OF_USE
+          consentMessage1 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG1",
+          consentMessage2 : "FRMELEMNTS_LBL_CONSENT_POPUP_POLICY_MSG",
+          consentMessage3 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG2",
+          redirectLink : RouterLinks.TERM_OF_USE
         }
         break;
 
       default:
         componentProps={
-          msg1 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG1",
-          msg2 : "FRMELEMNTS_LBL_CONSENT_POPUP_POLICY_MSG",
-          msg3 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG2",
-          link : RouterLinks.TERM_OF_USE
+          consentMessage1 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG1",
+          consentMessage2 : "FRMELEMNTS_LBL_CONSENT_POPUP_POLICY_MSG",
+          consentMessage3 : "FRMELEMNTS_LBL_CONSENT_POPUP_MSG2",
+          redirectLink : RouterLinks.TERM_OF_USE
         }
         break;
     }

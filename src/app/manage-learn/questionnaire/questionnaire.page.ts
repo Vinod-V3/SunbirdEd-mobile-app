@@ -10,6 +10,7 @@ import { RouterLinks } from '@app/app/app.constant';
 import { Network } from '@ionic-native/network/ngx';
 import { AppHeaderService } from '@app/services/app-header.service';
 import { CommonUtilService } from '@app/services/common-util.service';
+import { GenericPopUpService } from '../shared';
 
 @Component({
   selector: 'app-questionnaire',
@@ -69,7 +70,8 @@ export class QuestionnairePage implements OnInit, OnDestroy {
     private modalCtrl: ModalController,
     private translate: TranslateService,
     private router: Router,
-    private commonUtilService:CommonUtilService
+    private commonUtilService:CommonUtilService,
+    private popupService : GenericPopUpService
   ) {
     this.routerParam.queryParams.subscribe((params) => {
       this.submissionId = params.submisssionId;
@@ -153,9 +155,16 @@ export class QuestionnairePage implements OnInit, OnDestroy {
   }
 
   allowStart(){
-    this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].startTime = Date.now();
-    this.isViewOnly = false;
-    document.getElementById('stop').style.pointerEvents = 'auto';
+    this.popupService.showStartIMPForProjectPopUp('FRMELEMNTS_LBL_START_OBSERVATION_POPUP', 'FRMELEMNTS_LBL_START_OBSERVATION_POPUP_MSG1',
+    'FRMELEMNTS_LBL_START_OBSERVATION_POPUP_MSG2','FRMELEMNTS_LBL_START_OBSERVATION_POPUP').then(
+      (data:any)=>{
+        if(data){
+          this.schoolData['assessment']['evidences'][this.selectedEvidenceIndex].startTime = Date.now();
+          this.isViewOnly = false;
+          document.getElementById('stop').style.pointerEvents = 'auto';
+        }
+      }
+    )
   }
  async startAction(){
     await this.router.navigate([`/${RouterLinks.HOME}`]);

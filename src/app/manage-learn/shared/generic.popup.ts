@@ -4,6 +4,7 @@ import { PopoverController } from '@ionic/angular';
 import { SbGenericPopoverComponent } from '@app/app/components/popups/sb-generic-popover/sb-generic-popover.component';
 import { CommonUtilService } from '@app/services/common-util.service';
 import { StartImprovementComponent } from './components/start-improvement/start-improvement.component';
+import { JoinProgramComponent } from './components/join-program/join-program.component';
 
 @Injectable({
   providedIn: 'root',
@@ -74,4 +75,22 @@ export class GenericPopUpService {
     const { data } = await alert.onDidDismiss();
     return data;
 }
+
+async showJoinProgramForProjectPopup(header,name,type,button){
+  const alert = await this.popOverCtrl.create({
+    component : JoinProgramComponent,
+    componentProps: {
+      header: header,
+      name: name,
+      type:type,
+      button: button
+    },
+    cssClass: 'sb-popover',
+  });
+  await alert.present();
+  const {data} = await alert.onDidDismiss();
+  return data
+
+}
+
 }

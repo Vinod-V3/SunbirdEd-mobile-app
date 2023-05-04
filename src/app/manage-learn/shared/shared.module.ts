@@ -36,7 +36,8 @@ import {
   AttachmentListsComponent,
   ReportListComponent,
   EntitySearchLocalComponent,
-  StartImprovementComponent
+  StartImprovementComponent,
+  JoinProgramComponent
   
 } from './components';
 import { TranslateModule } from '@ngx-translate/core';
@@ -131,7 +132,8 @@ import { EntitySearchPipe } from './pipe/entity-local-search';
     ReportListComponent,
     EntitySearchPipe,
     EntitySearchLocalComponent,
-    StartImprovementComponent
+    StartImprovementComponent,
+    JoinProgramComponent
   ],
 
   imports: [CommonModule, FormsModule, IonicModule, ReactiveFormsModule, TranslateModule, ChartsModule],
@@ -190,7 +192,8 @@ import { EntitySearchPipe } from './pipe/entity-local-search';
     AttachmentListsComponent,
     EntitySearchPipe,
     EntitySearchLocalComponent,
-    StartImprovementComponent
+    StartImprovementComponent,
+    JoinProgramComponent
   ],
   providers: [
     Camera,
@@ -229,7 +232,8 @@ import { EntitySearchPipe } from './pipe/entity-local-search';
     AddLinkModalComponent,
     ReportListComponent,
     EntitySearchLocalComponent,
-    StartImprovementComponent
+    StartImprovementComponent,
+    JoinProgramComponent
   ],
   
 })

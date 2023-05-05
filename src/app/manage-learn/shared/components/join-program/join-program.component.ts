@@ -12,6 +12,7 @@ export class JoinProgramComponent implements OnInit {
   @Input() name
   @Input() type
   @Input() button
+  @Input() message?
 
   constructor(private popOverCtrl:PopoverController) { }
 

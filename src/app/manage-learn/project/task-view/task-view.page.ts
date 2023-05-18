@@ -53,7 +53,9 @@ export class TaskViewPage {
   viewOnlyMode: boolean = false;
   stateData;
   taskDateModalOpen = false;
-
+  subTaskDateModalOpen= false;
+  popoverReferences: any[] = [];
+  
   constructor(
     private router: Router,
     private params: ActivatedRoute,
@@ -425,6 +427,13 @@ export class TaskViewPage {
   }
   setOpen(isOpen: boolean, type ? : any) {
     this.taskDateModalOpen = isOpen;
+    if(type && type =='update'){
+      this.update();
+    }
+  }
+
+  openSubtaskCalendar(isOpen: boolean,i :number, type ? : any){
+    this.popoverReferences[i] = isOpen;
     if(type && type =='update'){
       this.update();
     }

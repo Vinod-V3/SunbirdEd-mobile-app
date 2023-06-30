@@ -253,7 +253,7 @@ export class SurveyHomeComponent {
     };
     this.assessmentService.post(config).subscribe((success) => {
       if (success.result) {
-        if(success.result.hasOwnProperty('requestForPIIConsent') && !success.result.programJoined){
+        if(success.result.hasOwnProperty('requestForPIIConsent') && !success.result.consentShared){
           this.redirect(success.result.assessment.submissionId,success.result);
         }else{
           data.downloaded
